@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(pnodeif)
+project(psrv)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,11 +7,15 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(pnodeif REQUIRED)
 
-rosidl_generate_interfaces("pnodeif"
-  "msg/Timing.msg"
-  "srv/Bench.srv"
+add_executable(psrv src/srv.cpp)
+ament_target_dependencies(psrv rclcpp rclcpp_components pnodeif)
+install(TARGETS
+  psrv
+  DESTINATION lib/psrv
 )
 
 # uncomment the following section in order to fill in

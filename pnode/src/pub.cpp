@@ -26,7 +26,7 @@ class PnodeSource : public rclcpp::Node {
  public:
   PnodeSource(const rclcpp::NodeOptions&) : Node("source"), msgid_(0) {
     publisher_ = this->create_publisher<pnodeif::msg::Timing>("msg_0", get_qos());
-    timer_ = this->create_wall_timer(100ms, [this]() { publish(); });
+    timer_ = this->create_wall_timer(1ms, [this]() { publish(); });
   }
   void publish() {
     pnodeif::msg::Timing t;
