@@ -1,0 +1,16 @@
+syntax = "proto3";
+package timing;
+
+message Request {
+  int64 msgid = 1 ;
+  int64 nanosec = 2;
+  string source = 3;
+}
+
+message Response {
+  int64 ack = 1;
+}
+
+service Bench {
+  rpc bench (Request) returns (Response) {}
+}

@@ -46,9 +46,11 @@ After experimenting with many runs, we make the following observations
     does no interesting work besides passing the messages and therefore
     scheduling the nodes one after another on the same thread is in fact
     the best execution strategy. But in real robots, each node is expected
-    to perform real work and single-threaded executor is unrealistic. 
-    So while we show both sets of numbers in the table below as a reference, 
-    the numbers in the multi-threaded executor rows are we what should focus on.
+    to perform real work, and there will process boundaries between the nodes,
+    so using single-threaded executor is unrealistic. 
+    Therefore, while we show both sets of numbers in the table below as 
+    a reference, the numbers in the multi-threaded executor rows are we
+    what should focus on.
 3. The highest latency cost is associated with ROS 2 threading. We observe
     that the latency is at the highest at 10Hz where the CPUs are mostly idling.
     And it gets significantly better at 100Hz at 1000Hz where CPUs idle less.
@@ -58,21 +60,41 @@ After experimenting with many runs, we make the following observations
 4. [Only applicable to pub/sub] Changing the QoS settings in various ways
     has virtually no impact to the observed latency.
 
-The numbers in the following table are per-hop latency in microseconds.
+The numbers in the following table are per-hop latency in microseconds
+using multi-threaded executor:
 
-| type           | executor        | frequency | P50 (us) | P90 (us) |
-| -------------- | --------------- | --------- | -------- | -------- |
-| pub/sub        | multi-threaded  | 10Hz      | 818      | 824      |
-| pub/sub        | multi-threaded  | 100Hz     | 107      | 113      |
-| pub/sub        | multi-threaded  | 1000Hz    | 134      | 138      |
-| client/service | multi-threaded  | 10Hz      | 675      | 689      |
-| client/service | multi-threaded  | 100Hz     | 124      | 130      |
-| client/service | multi-threaded  | 1000Hz    | 132      | 142      |
-|                |
-| pub/sub        | single-threaded | 10Hz      | 270      | 308      |
-| pub/sub        | single-threaded | 100Hz     | 52       | 55       |
-| pub/sub        | single-threaded | 1000Hz    | 49       | 50       |
-| client/service | single-threaded | 10Hz      | 318      | 331      |
-| client/service | single-threaded | 100Hz     | 56       | 63       |
-| client/service | single-threaded | 1000Hz    | 52       | 54       |
+| type           | frequency | P50 (us) | P90 (us) |
+| -------------- | --------- | -------- | -------- |
+| pub/sub        | 10Hz      | 818      | 824      |
+| pub/sub        | 100Hz     | 107      | 113      |
+| pub/sub        | 1000Hz    | 134      | 138      |
+| client/service | 10Hz      | 675      | 689      |
+| client/service | 100Hz     | 124      | 130      |
+| client/service | 1000Hz    | 132      | 142      |
 
+# For Comparison
+### Single-threaded executor
+Here are numbers using single-threaded executor. As explained above, 
+single-threaded executor is unrealistic, and the numbers are only provided as
+a reference:
+
+| type           | frequency | P50 (us) | P90 (us) |
+| -------------- | --------- | -------- | -------- |
+| pub/sub        | 10Hz      | 270      | 308      |
+| pub/sub        | 100Hz     | 52       | 55       |
+| pub/sub        | 1000Hz    | 49       | 50       |
+| client/service | 10Hz      | 318      | 331      |
+| client/service | 100Hz     | 56       | 63       |
+| client/service | 1000Hz    | 52       | 54       |
+
+### gPRC
+We also implemented a chain of gRPC client-server calls with the
+same topology as above, in the `grpc-bench` directory. This is the eqivalence
+of the client/service benchmark above. The results are significantly faster
+than ROS 2. Per-hop latency in microseconds:
+
+| frequency | P50 (us) | P90 (us) |
+| --------- | -------- | -------- |
+| 10Hz      | 470      | 479      |
+| 100Hz     | 88       | 105      |
+| 1000Hz    | 41       | 48       |
