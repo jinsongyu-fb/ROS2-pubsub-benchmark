@@ -1,0 +1,10 @@
+cxx_binary(
+  name = "bench",
+  srcs = [
+    "bench.cpp",
+    "gen-cpp/Bench.cpp",
+    "gen-cpp/timing_types.cpp",
+  ],
+  compiler_flags = ["-O3"],
+  linker_flags = ["-lthrift"],
+)

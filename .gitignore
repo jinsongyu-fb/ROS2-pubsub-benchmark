@@ -4,3 +4,4 @@ log/
 .vscode/
 bazel-*
 MODULE.bazel.lock
+buck-out/

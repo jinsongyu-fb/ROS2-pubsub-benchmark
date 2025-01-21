@@ -87,14 +87,26 @@ a reference:
 | client/service | 100Hz     | 56       | 63       |
 | client/service | 1000Hz    | 52       | 54       |
 
-### gPRC
-We also implemented a chain of gRPC client-server calls with the
-same topology as above, in the `grpc-bench` directory. This is the eqivalence
-of the client/service benchmark above. The results are significantly faster
-than ROS 2. Per-hop latency in microseconds:
+### thrift and gPRC
+We also implemented a chain of client-server calls in thrift 
+(in `thrift-bench` directory) and in gRPC (in `grpc-bench` directory).
+They use the same topology as above. This is the eqivalence of the 
+client/service benchmark above. Both sets of results are significantly faster
+than ROS 2, with thrift handily beating gRPC. Per-hop latency in microseconds:
 
+**thrift**
+| frequency | P50 (us) | P90 (us) |
+| --------- | -------- | -------- |
+| 10Hz      | 137      | 144      |
+| 100Hz     | 41       | 46       |
+| 1000Hz    | 29       | 38       |
+
+
+**gRPC**
 | frequency | P50 (us) | P90 (us) |
 | --------- | -------- | -------- |
 | 10Hz      | 470      | 479      |
 | 100Hz     | 88       | 105      |
 | 1000Hz    | 41       | 48       |
+
+
