@@ -5,3 +5,4 @@ log/
 bazel-*
 MODULE.bazel.lock
 buck-out/
+zenohbench/target/
