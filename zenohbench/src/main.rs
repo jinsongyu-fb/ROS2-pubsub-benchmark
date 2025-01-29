@@ -27,7 +27,10 @@ async fn main() {
 
   // Create the sink
   {
-    let subscriber = session.declare_subscriber(format!("bench/hop{}", NUM_RELAYS)).await.unwrap();
+    let subscriber = session
+      .declare_subscriber(format!("bench/hop{}", NUM_RELAYS))
+      .await
+      .unwrap();
     async_std::task::spawn(sink_loop(subscriber, epoch));
   }
 
@@ -104,7 +107,7 @@ async fn sink_loop(subscriber: zenoh::pubsub::Subscriber<Handler>, epoch: std::t
     if latency_vec.len() == 1000 {
       latency_vec.sort();
       let p50_us = latency_vec[latency_vec.len() / 2] / 1000;
-      let p90_us = latency_vec[latency_vec.len() * 9 / 10]/ 1000;
+      let p90_us = latency_vec[latency_vec.len() * 9 / 10] / 1000;
       println!("p50: {}us, p90: {}us", p50_us, p90_us);
       latency_vec.clear();
       return ();

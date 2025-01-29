@@ -41,18 +41,18 @@ we'll only show P90 (90th percentile) latency for brevity. All numbers are
 per-hop latency, in microseconds.
 
 ### Pub/Sub
-|          | ROS 2 | zenoh (Rust)|
-| ---------| ------| ----------- |
-| 10Hz     | 824   | 10          |
-| 100Hz    | 113   | 8           |
-| 1000Hz   | 138   | 5           |
+|        | ROS 2 (C++) | zenoh (Rust) |
+| ------ | ----------- | ------------ |
+| 10Hz   | 824         | 27           |
+| 100Hz  | 113         | 24           |
+| 1000Hz | 138         | 23           |
 
 ### Client/Server
-|          | ROS 2 (C++) | gRPC (C++) | thrift (C++) |
-| ---------| ------------| -----------| -------------|
-| 10Hz     | 689         | 47         | 144          |
-| 100Hz    | 130         | 10         | 46           |
-| 1000Hz   | 142         | 48         | 38           |
+|        | ROS 2 (C++) | gRPC (C++) | thrift (C++) | thrift (Rust) |
+| ------ | ----------- | ---------- | ------------ | ------------- |
+| 10Hz   | 689         | 479        | 144          | 143           |
+| 100Hz  | 130         | 105        | 46           | 141           |
+| 1000Hz | 142         | 48         | 38           | 138           |
 
 
 # Detailed Results:
@@ -112,12 +112,14 @@ a reference:
 
 ### thrift and gPRC
 We also implemented a chain of client-server calls in thrift
-(in `thrift-bench` directory) and in gRPC (in `grpc-bench` directory).
-They use the same topology as above. This is the eqivalence of the
-client/service benchmark above. Both sets of results are significantly faster
-than ROS 2, with thrift handily beating gRPC. Per-hop latency in microseconds:
+(in `thrift-bench` directory for C++, `thrift-rs` directory for Rust)
+and in gRPC (in `grpc-bench` directory for C++).
+They use the same topology as above. This is the eqivalence
+of the client/service benchmark above. All sets of results are 
+significantly faster than ROS 2, with thrift C++ handily beating gRPC. 
+Per-hop latency in microseconds:
 
-**thrift**
+**thrift C++**
 | frequency | P50 (us) | P90 (us) |
 | --------- | -------- | -------- |
 | 10Hz      | 137      | 144      |
@@ -125,20 +127,30 @@ than ROS 2, with thrift handily beating gRPC. Per-hop latency in microseconds:
 | 1000Hz    | 29       | 38       |
 
 
-**gRPC**
+**gRPC C++**
 | frequency | P50 (us) | P90 (us) |
 | --------- | -------- | -------- |
 | 10Hz      | 470      | 479      |
 | 100Hz     | 88       | 105      |
 | 1000Hz    | 41       | 48       |
 
+**thrift Rust**
+| frequency | P50 (us) | P90 (us) |
+| --------- | -------- | -------- |
+| 10Hz      | 137      | 143      |
+| 100Hz     | 135      | 141      |
+| 1000Hz    | 115      | 138      |
+
+
 ### zenoh pub/sub (Rust)
 We implemented a chain of pub/sub calls in Rust, using zenoh pub/sub library.
-The code is in `zenohbench` directory. Same topology as above. This is equivalent of the
-pub/sub benchmark as ROS 2 above. It's 100X faster than ROS 2.
+The code is in `zenohbench` directory. Same topology as above. 
+This is equivalent of the pub/sub benchmark as ROS 2 above.
+It's 5X to 30X faster than ROS 2.
 
 | frequency | P50 (us) | P90 (us) |
 | --------- | -------- | -------- |
-| 10Hz      | 7        | 10       |
-| 100Hz     | 6        | 8        |
-| 1000Hz    | 4        | 5        |
+| 10Hz      | 23       | 27       |
+| 100Hz     | 21       | 24       |
+| 1000Hz    | 21       | 23       |
+

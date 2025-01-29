@@ -6,3 +6,4 @@ bazel-*
 MODULE.bazel.lock
 buck-out/
 zenohbench/target/
+thrift-rs/target/
