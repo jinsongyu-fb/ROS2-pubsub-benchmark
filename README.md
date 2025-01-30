@@ -30,9 +30,9 @@ The overall takeaways:
 | Ryzen 5975WX | 10Hz     | 217         | 9            |
 | Ryzen 5975WX | 100Hz    | 219         | 8            |
 | Ryzen 5975WX | 1000Hz   | 223         | 4            |
-| AGX Orin     | 10Hz     |             |              |
-| AGX Orin     | 100Hz    |             |              |
-| AGX Orin     | 1000Hz   |             |              |
+| AGX Orin     | 10Hz     |             | 61           |
+| AGX Orin     | 100Hz    |             | 38           |
+| AGX Orin     | 1000Hz   |             | 20           |
 
 ### Client/Server
 | Hardware     | Msg Freq | ROS 2 (C++) | gRPC (C++) | thrift (C++) | thrift (Rust) |
@@ -43,9 +43,9 @@ The overall takeaways:
 | Ryzen 5975WX | 10Hz     | 212         | 164        | 52           | 68            |
 | Ryzen 5975WX | 100Hz    | 184         | 118        | 29           | 35            |
 | Ryzen 5975WX | 1000Hz   | 220         | 99         | 20           | 21            |
-| AGX Orin     | 10Hz     |             |            |              |               |
-| AGX Orin     | 100Hz    |             |            |              |               |
-| AGX Orin     | 1000Hz   |             |            |              |               |
+| AGX Orin     | 10Hz     |             | 468        |              | 125           |
+| AGX Orin     | 100Hz    |             | 312        |              | 34            |
+| AGX Orin     | 1000Hz   |             | 311        |              | 32            |
 
 # Benchmarking Details
 ### Hardware setup
@@ -57,7 +57,7 @@ regardless of the hardware choice.
 
 1. Intel i7-9700K CPU, Ubuntu 24.04.
 2. AMD Ryzen Threadripper PRO 5975WX CPU, Ubuntu 24.04 docker container on Fedora 41.
-3. nVidia Jetson AGX Orin.
+3. nVidia Jetson AGX Orin (Cortex-A78AE CPU), Ubuntu 22.04.
 
 ### Measurement and reporting
 We run the benchmark by sending 1000 messages at {10, 100, 1000}Hz, in order to observe
