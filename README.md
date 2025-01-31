@@ -43,9 +43,9 @@ The overall takeaways:
 | Ryzen 5975WX | 10Hz     | 212         | 164        | 52           | 68            |
 | Ryzen 5975WX | 100Hz    | 184         | 118        | 29           | 35            |
 | Ryzen 5975WX | 1000Hz   | 220         | 99         | 20           | 21            |
-| AGX Orin     | 10Hz     | 3179        | 468        |              | 125           |
-| AGX Orin     | 100Hz    | 4233        | 312        |              | 34            |
-| AGX Orin     | 1000Hz   | ERROR*      | 311        |              | 32            |
+| AGX Orin     | 10Hz     | 3179        | 468        | 82           | 125           |
+| AGX Orin     | 100Hz    | 4233        | 312        | 35           | 34            |
+| AGX Orin     | 1000Hz   | ERROR*      | 311        | 31           | 32            |
 
 *: ROS 2 client/server benchmark runs on AGX Orin drop messages at 1000Hz. 
 The fastest it could run successfully without dropping message on AGX Orin
@@ -77,6 +77,9 @@ relatively small.
 The ROS 2 message is defined in `pnodeif` directory. The `pnode` package runs benchmark
 to measure latency for pub/sub. And the `psrv` package runs benchmark to
 measure latency between a client and a service.
+All ROS 2 benchmarks are built and ran on ROS 2 Jazzy. Including on AGX Orin
+(built jazzy from source since no jazzy rpm available for Ubuntu 22.04.)
+Everything was built optimized (with `--cmake-args -DCMAKE_BUILD_TYPE=Release`).
 
 ### ROS 2 with single-threaded executor
 If we change the executor in `pnode` and `psrv` to use single-threaded executor,
