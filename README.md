@@ -30,9 +30,9 @@ The overall takeaways:
 | Ryzen 5975WX | 10Hz     | 217         | 9            |
 | Ryzen 5975WX | 100Hz    | 219         | 8            |
 | Ryzen 5975WX | 1000Hz   | 223         | 4            |
-| AGX Orin     | 10Hz     |             | 61           |
-| AGX Orin     | 100Hz    |             | 38           |
-| AGX Orin     | 1000Hz   |             | 20           |
+| AGX Orin     | 10Hz     | 4041        | 61           |
+| AGX Orin     | 100Hz    | 5365        | 38           |
+| AGX Orin     | 1000Hz   | 7968        | 20           |
 
 ### Client/Server
 | Hardware     | Msg Freq | ROS 2 (C++) | gRPC (C++) | thrift (C++) | thrift (Rust) |
@@ -43,9 +43,13 @@ The overall takeaways:
 | Ryzen 5975WX | 10Hz     | 212         | 164        | 52           | 68            |
 | Ryzen 5975WX | 100Hz    | 184         | 118        | 29           | 35            |
 | Ryzen 5975WX | 1000Hz   | 220         | 99         | 20           | 21            |
-| AGX Orin     | 10Hz     |             | 468        |              | 125           |
-| AGX Orin     | 100Hz    |             | 312        |              | 34            |
-| AGX Orin     | 1000Hz   |             | 311        |              | 32            |
+| AGX Orin     | 10Hz     | 3179        | 468        |              | 125           |
+| AGX Orin     | 100Hz    | 4233        | 312        |              | 34            |
+| AGX Orin     | 1000Hz   | ERROR*      | 311        |              | 32            |
+
+*: ROS 2 client/server benchmark runs on AGX Orin drop messages at 1000Hz. 
+The fastest it could run successfully without dropping message on AGX Orin
+is at 200Hz. 
 
 # Benchmarking Details
 ### Hardware setup
@@ -102,5 +106,20 @@ Note these these implementations use synchronous blocking APIs.
 ### zenoh pub/sub (Rust)
 zenoh is a lightweight pub/sub framework implemented in Rust and have language
 bindings including Python and others, and it's used in robotics.rs.
-The `zenohbench` directory implements benchmark for zenoh in Rust.
+The `zenohbench` directory implements benchmark for zenoh in Rust 
+(run `cargo run --release --bin bench`).
 It uses async APIs and it's the fastest among all benchmark runs.
+
+Besides the same-process small message size benchmark, we also implemented
+multi-process pub/sub benchmark with zenoh, where each the client,
+each relay, and the sink are all running in their own process. 
+And we run with various message sizes at 100Hz. On Intel i7-9700K 
+(run `./run_mp_bench.sh`):
+
+| Msg Size  | same-proc | multi-proc |
+| --------- | --------- | ---------- |
+| 10        | 20        | 401        |
+| 1000      | 20        | 347        |
+| 10,000    | 25        | 361        |
+| 100,000   | 139       | 575        |
+| 1,000,000 | 297       | 2468       |

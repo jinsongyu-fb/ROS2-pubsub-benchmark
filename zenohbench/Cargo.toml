@@ -8,3 +8,19 @@ async-std = "*"
 zenoh = "1.1.1"
 tokio = { version = "1", features = ["full"] }
 thrift = "*"
+
+[[bin]]
+name = "bench"
+path = "src/main.rs"
+
+[[bin]]
+name = "mpclient"
+path = "src/mpclient.rs"
+
+[[bin]]
+name = "mpsink"
+path = "src/mpsink.rs"
+
+[[bin]]
+name = "mprelay"
+path = "src/mprelay.rs"

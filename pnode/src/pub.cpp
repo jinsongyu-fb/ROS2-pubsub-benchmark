@@ -36,7 +36,7 @@ class PnodeSource : public rclcpp::Node {
                     .count();
     t.source = "pnode publisher";
     publisher_->publish(t);
-    std::cout << t.source << "\n";
+    // std::cout << t.source << "\n";
   }
 
  private:
@@ -84,7 +84,7 @@ class PnodeSink : public rclcpp::Node {
                           .count();
     int64_t nanosec_per_hop = (nanosec - msg.nanosec) / (kNumRelays + 1);
     data_.insert(nanosec_per_hop);
-    std::cout << "nano seconds per hop: " << nanosec_per_hop << "\n";
+    // std::cout << "nano seconds per hop: " << nanosec_per_hop << "\n";
 
     if (data_.size() >= 1000) {
       print_stats();
